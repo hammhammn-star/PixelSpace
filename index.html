@@ -47,12 +47,41 @@ for(let i=0;i<2500;i++){
 function pesan(){
  const brand=document.getElementById('brand').value.trim();
  const link=document.getElementById('link').value.trim();
+
  if(!pilihan.size)return alert('Pilih pixel dulu!');
  if(!brand||!link)return alert('Isi nama bisnis dan link website!');
- try{if(!['http:','https:'].includes(new URL(link).protocol))throw 0}
- catch(e){return alert('Link website tidak valid!')}
- const data={nama:brand,website:link,pixel:[...pilihan].map(i=>i+1),total:pilihan.size*1000};
- document.getElementById('hasil').textContent='Pesanan dibuat di perangkat ini. Total Rp'+data.total.toLocaleString('id-ID')+'. Hubungi admin untuk pembayaran manual. Data pesanan belum dikirim ke admin.';
+
+ try{
+   if(!['http:','https:'].includes(new URL(link).protocol))throw 0;
+ }catch(e){
+   return alert('Link website tidak valid!');
+ }
+
+ const data={
+   nama:brand,
+   website:link,
+   pixel:[...pilihan].map(i=>i+1),
+   total:pilihan.size*1000
+ };
+
+ const nomorAdmin='6285879208410';
+
+ const pesanWA=
+   'Halo admin PixelSpace, saya mau pesan iklan.%0A%0A'+
+   'Nama bisnis: '+encodeURIComponent(data.nama)+'%0A'+
+   'Website: '+encodeURIComponent(data.website)+'%0A'+
+   'Nomor pixel: '+encodeURIComponent(data.pixel.join(', '))+'%0A'+
+   'Jumlah pixel: '+data.pixel.length+'%0A'+
+   'Total: Rp'+data.total.toLocaleString('id-ID');
+
+ document.getElementById('hasil').textContent=
+   'Pesanan siap dikirim ke WhatsApp. Total Rp'+
+   data.total.toLocaleString('id-ID')+'.';
+
+ window.open(
+   'https://wa.me/6285879208410'?text='+pesanWA,
+   '_blank'
+ );
 }
 </script>
 <a href="https://wa.me/6285879208410"
