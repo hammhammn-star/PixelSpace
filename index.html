@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pixel Market</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;background:#101827;color:white;font-family:Arial;text-align:center}
+h1{color:#45e0c0}
+#grid{display:grid;grid-template-columns:repeat(50,minmax(0,1fr));width:100%;max-width:600px;margin:20px auto;aspect-ratio:1;border:1px solid #536174}
+.pixel{min-width:0;padding:0;border:1px solid #303d50;background:#202c3e;aspect-ratio:1}
+.pixel.selected{background:#45e0c0}
+input{width:100%;max-width:400px;padding:12px;margin:5px;border-radius:6px;border:0}
+button.action{background:#45e0c0;padding:12px 18px;border:0;border-radius:7px;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>PIXEL MARKET</h1>
+<p>Tempat iklan digital milikmu!</p>
+<p>Harga: Rp1.000 per pixel</p>
+<div>Dipilih: <b id="count">0</b> pixel</div>
+<div id="grid"></div>
+<h2 id="total">Total: Rp0</h2>
+<input id="brand" placeholder="Nama bisnis kamu">
+<input id="link" placeholder="Link website iklan (https://...)">
+<br><br>
+<button class="action" onclick="pesan()">Buat Pesanan</button>
+<p id="hasil"></p>
+<script>
+const grid=document.getElementById('grid');
+const pilihan=new Set();
+for(let i=0;i<2500;i++){
+ const b=document.createElement('button');
+ b.className='pixel';
+ b.setAttribute('aria-label','Pixel '+(i+1));
+ b.onclick=()=>{
+  if(pilihan.has(i)){pilihan.delete(i);b.classList.remove('selected')}
+  else{pilihan.add(i);b.classList.add('selected')}
+  document.getElementById('count').textContent=pilihan.size;
+  document.getElementById('total').textContent='Total: Rp'+(pilihan.size*1000).toLocaleString('id-ID');
+ };
+ grid.appendChild(b);
+}
+function pesan(){
+ const brand=document.getElementById('brand').value.trim();
+ const link=document.getElementById('link').value.trim();
+ if(!pilihan.size)return alert('Pilih pixel dulu!');
+ if(!brand||!link)return alert('Isi nama bisnis dan link website!');
+ try{if(!['http:','https:'].includes(new URL(link).protocol))throw 0}
+ catch(e){return alert('Link website tidak valid!')}
+ const data={nama:brand,website:link,pixel:[...pilihan].map(i=>i+1),total:pilihan.size*1000};
+ document.getElementById('hasil').textContent='Pesanan dibuat di perangkat ini. Total Rp'+data.total.toLocaleString('id-ID')+'. Hubungi admin untuk pembayaran manual. Data pesanan belum dikirim ke admin.';
+}
+</script>
+</body>
+</html>
