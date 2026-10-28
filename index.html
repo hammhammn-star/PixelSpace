@@ -1,95 +1,81 @@
 
 
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelSpace</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding:20px;background:#101827;color:white;font-family:Arial;text-align:center}
-h1{color:#45e0c0}
-#grid{display:grid;grid-template-columns:repeat(50,minmax(0,1fr));width:100%;max-width:600px;margin:20px auto;aspect-ratio:1;border:1px solid #536174}
-.pixel{min-width:0;padding:0;border:1px solid #303d50;background:#202c3e;aspect-ratio:1}
-.pixel.selected{background:#45e0c0}
-input{width:100%;max-width:400px;padding:12px;margin:5px;border-radius:6px;border:0}
-button.action{background:#45e0c0;padding:12px 18px;border:0;border-radius:7px;font-weight:bold}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 15px;
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h2 {
+  font-size: 22px;
+  margin: 10px 0 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(100, 1fr);
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+}
+
+.pixel {
+  aspect-ratio: 1 / 1;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background: white;
+}
+
+.wa {
+  display: inline-block;
+  margin: 20px auto;
+  color: #128C4A;
+  font-size: 16px;
+  text-decoration: underline;
+  cursor: pointer;
+}
 </style>
 </head>
+
 <body>
-<h1>PIXEL MARKET</h1>
-<p>Tempat iklan digital milikmu!</p>
-<p>Harga: Rp1.000 per pixel</p>
-<div>Dipilih: <b id="count">0</b> pixel</div>
-<div id="grid"></div>
-<h2 id="total">Total: Rp0</h2>
-<input id="brand" placeholder="Nama bisnis kamu">
-<input id="link" placeholder="Link website iklan (https://...)">
-<br><br>
-<button class="action" onclick="pesan()">Buat Pesanan</button>
-<p id="hasil"></p>
-<script>
-const grid=document.getElementById('grid');
-const pilihan=new Set();
-for(let i=0;i<2500;i++){
- const b=document.createElement('button');
- b.className='pixel';
- b.setAttribute('aria-label','Pixel '+(i+1));
- b.onclick=()=>{
-  if(pilihan.has(i)){pilihan.delete(i);b.classList.remove('selected')}
-  else{pilihan.add(i);b.classList.add('selected')}
-  document.getElementById('count').textContent=pilihan.size;
-  document.getElementById('total').textContent='Total: Rp'+(pilihan.size*1000).toLocaleString('id-ID');
- };
- grid.appendChild(b);
-}
-function pesan(){
- const brand=document.getElementById('brand').value.trim();
- const link=document.getElementById('link').value.trim();
 
- if(!pilihan.size)return alert('Pilih pixel dulu!');
- if(!brand||!link)return alert('Isi nama bisnis dan link website!');
+<h2>PixelSpace</h2>
 
- try{
-   if(!['http:','https:'].includes(new URL(link).protocol))throw 0;
- }catch(e){
-   return alert('Link website tidak valid!');
- }
+<div class="grid" id="grid"></div>
 
- const data={
-   nama:brand,
-   website:link,
-   pixel:[...pilihan].map(i=>i+1),
-   total:pilihan.size*1000
- };
-
- const nomorAdmin='6285879208410';
-
- const pesanWA=
-   'Halo admin PixelSpace, saya mau pesan iklan.%0A%0A'+
-   'Nama bisnis: '+encodeURIComponent(data.nama)+'%0A'+
-   'Website: '+encodeURIComponent(data.website)+'%0A'+
-   'Nomor pixel: '+encodeURIComponent(data.pixel.join(', '))+'%0A'+
-   'Jumlah pixel: '+data.pixel.length+'%0A'+
-   'Total: Rp'+data.total.toLocaleString('id-ID');
-
- document.getElementById('hasil').textContent=
-   'Pesanan siap dikirim ke WhatsApp. Total Rp'+
-   data.total.toLocaleString('id-ID')+'.';
-
- window.open(
-   'https://wa.me/6285879208410'?text='+pesanWA,
-   '_blank'
- );
-}
-</script>
-<a href="https://wa.me/6285879208410"
+<a class="wa"
+   href="https://wa.me/6285879208410"
    target="_blank"
-   style="position:fixed;bottom:20px;right:20px;
-   background:#25D366;color:white;padding:12px 16px;
-   border-radius:10px;text-decoration:none;z-index:9999;">
+   rel="noopener">
    Pesan via WhatsApp
 </a>
+
+<script>
+const grid = document.getElementById("grid");
+
+for (let i = 0; i < 10000; i++) {
+  const pixel = document.createElement("div");
+  pixel.className = "pixel";
+  grid.appendChild(pixel);
+}
+</script>
+
 </body>
 </html>
