@@ -1,80 +1,433 @@
 
-
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PixelSpace</title>
-
+<title>PixelSpace - Beli Pixel Kamu</title>
+<meta name="description" content="Beli ruang pixel di PixelSpace untuk menampilkan iklan dan promosi website kamu.">
 <style>
-* {
-  box-sizing: border-box;
+:root {
+  --bg: #080d18;
+  --panel: #111a2b;
+  --text: #f1f5ff;
+  --muted: #96a4bd;
+  --blue: #4788ff;
+  --green: #20c878;
 }
-
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  padding: 15px;
-  background: #ffffff;
+  background: var(--bg);
+  color: var(--text);
   font-family: Arial, sans-serif;
+}
+header {
+  padding: 22px 16px;
+  border-bottom: 1px solid #202c40;
+  background: #0b1220;
+}
+.nav {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.logo { font-size: 23px; font-weight: 800; }
+.logo span { color: var(--blue); }
+.nav small { color: var(--muted); }
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 32px 14px 100px;
+}
+.hero { text-align: center; padding: 18px 0 30px; }
+.hero h1 { font-size: clamp(30px, 7vw, 50px); margin: 0 0 14px; }
+.hero h1 span { color: var(--blue); }
+.hero p {
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 570px;
+  margin: auto;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat {
+  background: var(--panel);
+  border: 1px solid #253249;
+  padding: 16px 8px;
+  border-radius: 12px;
   text-align: center;
 }
-
-h2 {
-  font-size: 22px;
-  margin: 10px 0 20px;
+.stat strong { display: block; font-size: 19px; margin-bottom: 7px; }
+.stat small { color: var(--muted); font-size: 11px; }
+.section {
+  background: var(--panel);
+  border: 1px solid #253249;
+  border-radius: 15px;
+  padding: 16px;
+  margin-bottom: 18px;
 }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(100, 1fr);
+.section h2 { margin: 0 0 8px; font-size: 19px; }
+.description { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  margin: 17px 0;
+  color: var(--muted);
+}
+.legend span { display: flex; align-items: center; gap: 6px; }
+.dot { width: 12px; height: 12px; border-radius: 3px; }
+.available { background: #29384e; }
+.chosen { background: var(--blue); }
+.sold { background: #e15b69; }
+.grid-outer {
   width: 100%;
-  max-width: 700px;
+  overflow: auto;
+  background: #070c15;
+  border: 1px solid #29384e;
+  border-radius: 9px;
+  padding: 8px;
+  max-height: 65vh;
+  overscroll-behavior: contain;
+}
+#pixelGrid {
+  display: grid;
+  grid-template-columns: repeat(100, 9px);
+  grid-auto-rows: 9px;
+  gap: 1px;
+  width: max-content;
   margin: auto;
-  border-top: 1px solid #ddd;
-  border-left: 1px solid #ddd;
 }
-
 .pixel {
-  aspect-ratio: 1 / 1;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background: white;
-}
-
-.wa {
-  display: inline-block;
-  margin: 20px auto;
-  color: #128C4A;
-  font-size: 16px;
-  text-decoration: underline;
+  width: 9px;
+  height: 9px;
+  background: #29384e;
+  border: 0;
+  padding: 0;
   cursor: pointer;
+  border-radius: 1px;
+}
+.pixel:hover { background: #75a8ff; }
+.pixel.selected { background: var(--blue); }
+.pixel.sold {
+  background: #e15b69;
+  cursor: not-allowed;
+}
+.grid-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+}
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+.summary div {
+  padding: 14px;
+  background: #0b1322;
+  border-radius: 10px;
+}
+.summary small { color: var(--muted); }
+.summary strong { display: block; font-size: 20px; margin-top: 7px; }
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+button { font: inherit; }
+.action {
+  border: 0;
+  border-radius: 9px;
+  padding: 13px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.primary { background: var(--blue); color: white; flex: 1; }
+.secondary { background: #26334a; color: white; }
+.action:active { transform: scale(.98); }
+.info-list { padding-left: 20px; line-height: 1.9; font-size: 14px; }
+footer {
+  text-align: center;
+  border-top: 1px solid #202c40;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 25px 15px 90px;
+  line-height: 1.8;
+}
+/* Tombol WhatsApp mengambang */
+.wa-float {
+  position: fixed;
+  z-index: 1000;
+  right: 17px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: white;
+  background: #19b967;
+  border-radius: 50px;
+  padding: 13px 18px;
+  box-shadow: 0 5px 24px #0008;
+  font-size: 14px;
+  font-weight: bold;
+}
+.wa-icon { font-size: 22px; }
+@media(max-width: 480px) {
+  .stats { gap: 6px; }
+  .stat { padding: 13px 4px; }
+  .stat strong { font-size: 16px; }
+  .stat small { font-size: 10px; }
+  .section { padding: 13px; }
+  .wa-float { right: 12px; bottom: 14px; padding: 12px 15px; }
 }
 </style>
 </head>
-
 <body>
 
-<h2>PixelSpace</h2>
+<header>
+  <div class="nav">
+    <div class="logo">Pixel<span>Space</span></div>
+    <small>Digital Advertising Space</small>
+  </div>
+</header>
 
-<div class="grid" id="grid"></div>
+<main>
+  <section class="hero">
+    <h1>Own Your <span>Pixel.</span></h1>
+    <p>
+      Punya tempat untuk promosi website, toko online,
+      atau karya kamu. Pilih pixel yang kamu mau dan
+      pesan langsung melalui WhatsApp.
+    </p>
+  </section>
 
-<a class="wa"
-   href="https://wa.me/6285879208410"
-   target="_blank"
-   rel="noopener">
-   Pesan via WhatsApp
+  <section class="stats">
+    <div class="stat">
+      <strong>10.000</strong>
+      <small>TOTAL PIXEL</small>
+    </div>
+    <div class="stat">
+      <strong>Rp1.000</strong>
+      <small>HARGA PER PIXEL</small>
+    </div>
+    <div class="stat">
+      <strong id="availableCount">10.000</strong>
+      <small>PIXEL TERSEDIA*</small>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Pilih Pixel Kamu</h2>
+    <div class="description">
+      Ketuk kotak untuk memilih. Ketuk lagi untuk membatalkan.
+      Geser layar ke samping atau ke bawah jika diperlukan.
+    </div>
+
+    <div class="legend">
+      <span><i class="dot available"></i>Tersedia</span>
+      <span><i class="dot chosen"></i>Pilihan kamu</span>
+      <span><i class="dot sold"></i>Terjual</span>
+    </div>
+
+    <div class="grid-outer">
+      <div id="pixelGrid"></div>
+    </div>
+    <div class="grid-note">
+      Grid 100 × 100 · 10.000 kotak · 1 kotak = 1 pixel
+    </div>
+
+    <div class="summary">
+      <div>
+        <small>Pixel dipilih</small>
+        <strong id="selectedCount">0</strong>
+      </div>
+      <div>
+        <small>Total harga</small>
+        <strong id="totalPrice">Rp0</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="action secondary" id="clearBtn">Reset Pilihan</button>
+      <button class="action primary" id="orderBtn">Pesan Sekarang ↗</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Cara Memesan</h2>
+    <ol class="info-list">
+      <li>Pilih satu atau beberapa kotak pixel.</li>
+      <li>Periksa jumlah dan total harga.</li>
+      <li>Tekan tombol Pesan Sekarang.</li>
+      <li>Pesanan akan disiapkan di WhatsApp admin.</li>
+      <li>Kirim gambar/logo dan tautan tujuan iklan.</li>
+      <li>Tunggu konfirmasi ketersediaan dan pembayaran dari admin.</li>
+    </ol>
+    <p class="description">
+      *Pixel yang dipilih belum otomatis dipesan atau dibayar.
+      Admin perlu memverifikasi dan menandai pixel yang sudah terjual.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Pasang Iklan Kamu</h2>
+    <p class="description">
+      Tampilkan identitas atau promosi kamu di PixelSpace.
+      Hubungi admin untuk mengirim gambar dan tautan yang akan dipasang.
+      Penayangan iklan dilakukan setelah pesanan dikonfirmasi.
+    </p>
+    <button class="action primary" id="contactBtn" style="width:100%">
+      Hubungi Admin via WhatsApp
+    </button>
+  </section>
+</main>
+
+<footer>
+  © 2026 PixelSpace. All rights reserved.<br>
+  Tempat kecil untuk ide dan promosi kamu.
+</footer>
+
+<a class="wa-float" id="floatingWA" href="#" target="_blank"
+   rel="noopener noreferrer">
+  <span class="wa-icon">☏</span>
+  <span>Pesan via WhatsApp</span>
 </a>
 
 <script>
-const grid = document.getElementById("grid");
+/* ==============================
+   PENGATURAN WEBSITE
+   ============================== */
 
-for (let i = 0; i < 10000; i++) {
-  const pixel = document.createElement("div");
+// GANTI dengan nomor WhatsApp admin.
+// Gunakan kode negara 62, tanpa tanda + atau spasi.
+const NOMOR_WA = "6281234567890";
+
+// Harga setiap pixel dalam rupiah.
+const HARGA_PIXEL = 1000;
+
+// Daftar nomor pixel yang sudah terjual.
+// Contoh: [1, 2, 3, 120, 121]
+// Kosongkan jika belum ada yang terjual.
+const PIXEL_TERJUAL = [];
+
+/* ==============================
+   SISTEM PIXEL
+   ============================== */
+
+const grid = document.getElementById("pixelGrid");
+const selected = new Set();
+const formatter = new Intl.NumberFormat("id-ID");
+
+const sold = new Set(PIXEL_TERJUAL);
+const fragment = document.createDocumentFragment();
+
+for (let i = 1; i <= 10000; i++) {
+  const pixel = document.createElement("button");
+  pixel.type = "button";
   pixel.className = "pixel";
-  grid.appendChild(pixel);
+  pixel.dataset.id = i;
+  pixel.title = "Pixel #" + i;
+
+  if (sold.has(i)) {
+    pixel.classList.add("sold");
+    pixel.disabled = true;
+    pixel.title = "Pixel #" + i + " sudah terjual";
+  } else {
+    pixel.setAttribute("aria-label", "Pilih pixel #" + i);
+
+    pixel.addEventListener("click", function () {
+      const id = Number(this.dataset.id);
+
+      if (selected.has(id)) {
+        selected.delete(id);
+        this.classList.remove("selected");
+      } else {
+        selected.add(id);
+        this.classList.add("selected");
+      }
+
+      updateSummary();
+    });
+  }
+
+  fragment.appendChild(pixel);
 }
+
+grid.appendChild(fragment);
+
+function updateSummary() {
+  document.getElementById("selectedCount").textContent =
+    formatter.format(selected.size);
+
+  document.getElementById("totalPrice").textContent =
+    "Rp" + formatter.format(selected.size * HARGA_PIXEL);
+
+  document.getElementById("availableCount").textContent =
+    formatter.format(10000 - sold.size);
+}
+
+document.getElementById("clearBtn").addEventListener("click", function () {
+  selected.clear();
+  grid.querySelectorAll(".selected").forEach(function (pixel) {
+    pixel.classList.remove("selected");
+  });
+  updateSummary();
+});
+
+function openWhatsApp(message) {
+  if (!/^[0-9]{10,15}$/.test(NOMOR_WA)) {
+    alert("Nomor WhatsApp admin belum benar. Periksa pengaturan NOMOR_WA.");
+    return;
+  }
+
+  const url = "https://wa.me/" +6285879208410+
+    "?text=" + encodeURIComponent(message);
+
+  window.open(url, "_blank");
+}
+
+document.getElementById("orderBtn").addEventListener("click", function () {
+  if (selected.size === 0) {
+    alert("Pilih minimal satu pixel terlebih dahulu!");
+    return;
+  }
+
+  const ids = Array.from(selected).sort((a, b) => a - b);
+  const total = selected.size * HARGA_PIXEL;
+
+  const message =
+    "Halo admin PixelSpace, saya ingin memesan pixel.\n\n" +
+    "Jumlah: " + selected.size + " pixel\n" +
+    "Nomor pixel: " + ids.join(", ") + "\n" +
+    "Harga per pixel: Rp" + formatter.format(HARGA_PIXEL) + "\n" +
+    "Total: Rp" + formatter.format(total) + "\n\n" +
+    "Mohon konfirmasi ketersediaan pixel dan cara pembayarannya.";
+
+  openWhatsApp(message);
+});
+
+document.getElementById("contactBtn").addEventListener("click", function () {
+  openWhatsApp("Halo admin PixelSpace, saya ingin bertanya tentang pemasangan iklan.");
+});
+
+document.getElementById("floatingWA").addEventListener("click", function (event) {
+  event.preventDefault();
+  openWhatsApp("Halo admin PixelSpace, saya ingin bertanya tentang pixel.");
+});
+
+updateSummary();
 </script>
 
 </body>
